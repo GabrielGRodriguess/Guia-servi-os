@@ -1,0 +1,36 @@
+import {
+  Hammer,
+  Zap,
+  Droplets,
+  TreePine,
+  Wrench,
+  Brush,
+  GraduationCap,
+  Music,
+  Dumbbell,
+  Apple,
+  Palette,
+  Code,
+  Megaphone,
+  Package,
+  LayoutGrid
+} from 'lucide-react';
+
+export const categories = [
+  { id: 'todos', name: 'Todos', icon: LayoutGrid },
+  { id: 'pedreiro', name: 'Pedreiro', icon: Hammer },
+  { id: 'eletricista', name: 'Eletricista', icon: Zap },
+  { id: 'encanador', name: 'Encanador', icon: Droplets },
+  { id: 'marceneiro', name: 'Marceneiro', icon: Hammer },
+  { id: 'diarista', name: 'Diarista', icon: Brush },
+  { id: 'jardineiro', name: 'Jardineiro', icon: TreePine },
+  { id: 'mecanico', name: 'Mecânico', icon: Wrench },
+  { id: 'professor-particular', name: 'Professor particular', icon: GraduationCap },
+  { id: 'professor-musica', name: 'Professor de música', icon: Music },
+  { id: 'personal-trainer', name: 'Personal trainer', icon: Dumbbell },
+  { id: 'nutricionista', name: 'Nutricionista', icon: Apple },
+  { id: 'designer', name: 'Designer', icon: Palette },
+  { id: 'desenvolvedor', name: 'Desenvolvedor', icon: Code },
+  { id: 'marketing', name: 'Marketing', icon: Megaphone },
+  { id: 'servicos-gerais', name: 'Serviços gerais', icon: Package },
+];
