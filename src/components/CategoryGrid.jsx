@@ -1,8 +1,6 @@
 import React from 'react';
-import { categories } from '../data/categories';
 import { motion } from 'framer-motion';
-
-const CategoryGrid = ({ selectedCategory, onSelectCategory }) => {
+const CategoryGrid = ({ categories, selectedCategory, onSelectCategory }) => {
   return (
     <div className="category-section">
       <h3>Categorias</h3>

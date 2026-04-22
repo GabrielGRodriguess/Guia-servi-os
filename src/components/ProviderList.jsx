@@ -9,7 +9,6 @@ const ProviderList = ({ providers, onSelectProvider, onClearFilters }) => {
 
   return (
     <div className="provider-list-section">
-      <h3>Prestadores Recomendados</h3>
       <div className="provider-grid">
         {providers.map(provider => (
           <ProviderCard 
