@@ -10,7 +10,6 @@ import EmptySearchState from './components/EmptySearchState';
 import ProviderForm from './components/ProviderForm';
 import AdminPanel from './components/AdminPanel';
 import { LoginModal, HowItWorksModal } from './components/Modals';
-import { initialProviders } from './data/providers';
 import { getProviders, addProvider, updateProvider, deleteProviderPermanently } from './utils/storage';
 import { Award, Users, Star, Clock } from 'lucide-react';
 import './index.css';
@@ -32,8 +31,15 @@ function App() {
 
   // Load providers from storage on mount
   useEffect(() => {
-    const storedProviders = getProviders(initialProviders);
-    setProviders(storedProviders);
+    const fetchProviders = async () => {
+      try {
+        const storedProviders = await getProviders();
+        setProviders(storedProviders);
+      } catch (err) {
+        console.error('Erro ao buscar dados do banco:', err);
+      }
+    };
+    fetchProviders();
   }, []);
 
   // 1. Get providers for the selected city
@@ -103,21 +109,25 @@ function App() {
     setView('register');
   };
 
-  const handleAddProvider = (newProvider) => {
-    // New providers start as 'pending' for admin review
-    const providerWithStatus = { ...newProvider, provider_status: 'pending' };
-    const updatedProviders = addProvider(providerWithStatus);
-    setProviders(updatedProviders);
+  const handleAddProvider = async (newProvider) => {
+    // Set new providers to active immediately as per user request to see them
+    const providerWithStatus = { ...newProvider, provider_status: 'active', status: 'approved' };
+    
+    // Save to real database
+    const savedProvider = await addProvider(providerWithStatus);
+    
+    // Update local state with the exact record from the database
+    setProviders(prev => [savedProvider, ...prev]);
   };
 
-  const handleUpdateProvider = (updatedProvider) => {
-    const updatedProviders = updateProvider(updatedProvider);
-    setProviders(updatedProviders);
+  const handleUpdateProvider = async (updatedProvider) => {
+    const savedProvider = await updateProvider(updatedProvider);
+    setProviders(prev => prev.map(p => p.id === savedProvider.id ? savedProvider : p));
   };
 
-  const handleDeleteProvider = (providerId) => {
-    const updatedProviders = deleteProviderPermanently(providerId);
-    setProviders(updatedProviders);
+  const handleDeleteProvider = async (providerId) => {
+    await deleteProviderPermanently(providerId);
+    setProviders(prev => prev.filter(p => p.id !== providerId));
   };
 
   const handleEditProvider = (provider) => {
@@ -147,11 +157,11 @@ function App() {
                   Profissionais da sua cidade, com destaque para alunos e ex-alunos ETEC.
                 </p>
                 
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '40px' }}>
+                <div className="hero-buttons">
                   <button className="btn-primary btn-etec" onClick={() => { setFilter('etec'); setSelectedService(null); }}>
                     Ver profissionais ETEC
                   </button>
-                  <button className="btn-secondary" style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }} onClick={() => { setFilter('all'); setSelectedService(null); }}>
+                  <button className="btn-secondary btn-outline-white" onClick={() => { setFilter('all'); setSelectedService(null); }}>
                     Ver todos os prestadores
                   </button>
                 </div>

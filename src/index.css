@@ -130,12 +130,28 @@ button {
 
 /* Hero Section V2 */
 .hero-section-v2 {
-  padding: 80px 0;
+  padding: 60px 0;
   text-align: center;
   background: var(--primary);
   color: white;
   position: relative;
   overflow: hidden;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.btn-outline-white {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.btn-outline-white:hover {
+  background: rgba(255,255,255,0.2);
 }
 
 .hero-title-v2 {
@@ -469,13 +485,25 @@ button {
   animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Form Styles */
+.form-card {
+  padding: 48px;
+  border-radius: 40px;
+}
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
   .hero-controls {
     flex-direction: column;
-    border-radius: 28px;
-    padding: 16px;
-    gap: 12px;
+    border-radius: 20px;
+    padding: 12px;
+    gap: 0;
     background: white;
   }
   .city-selector-container {
@@ -484,6 +512,7 @@ button {
     padding: 0 0 12px 0;
     flex: none;
     width: 100%;
+    margin-bottom: 12px;
   }
   .city-selector-wrapper {
     padding: 0 8px;
@@ -495,6 +524,53 @@ button {
 @media (max-width: 768px) {
   .desktop-nav { display: none; }
   .card-actions-v2 { grid-template-columns: 1fr; }
+  
+  .header { padding: 12px 0; }
+  .header .logo h1 { font-size: 1.4rem; }
+  
+  .hero-section-v2 { padding: 30px 0 40px; }
+  .hero-title-v2 { font-size: 2rem; margin-bottom: 16px; }
+  .hero-subtitle-v2 { font-size: 1rem; margin-bottom: 30px; }
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding: 0 10px;
+  }
+  
+  .hero-buttons button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  .container { padding: 0 16px; }
+  
+  .section-divider { margin: 40px 0 24px; }
+  .section-divider h2 { font-size: 1.3rem; }
+  .section-divider .line { flex: 1; }
+
+  .provider-card-v2 { padding: 24px; gap: 16px; }
+  .provider-main-info h4 { font-size: 1.25rem; }
+  
+  .select-city-prompt { padding: 40px 16px; margin: 20px 0; }
+  .select-city-prompt h2 { font-size: 1.3rem; }
+  .prompt-icon { font-size: 2.5rem; }
+
+  .filters-bar { gap: 8px; margin-bottom: 24px; justify-content: center; }
+  .filter-btn { padding: 8px 16px; font-size: 0.85rem; width: calc(50% - 4px); justify-content: center; }
+  
+  .footer-v2 { padding: 40px 0 30px; margin-top: 60px; }
+  .footer-links { flex-direction: column; gap: 16px; align-items: center; }
+  
+  .form-card { padding: 24px; border-radius: 24px; }
+  .grid-2-cols { grid-template-columns: 1fr; gap: 16px; }
+}
+
+@media (max-width: 430px) {
+  .hero-title-v2 { font-size: 1.8rem; }
+  .service-chip { padding: 8px 16px; font-size: 0.9rem; }
 }
 
 /* Trust Badges */

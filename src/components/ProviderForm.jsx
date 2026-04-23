@@ -33,6 +33,8 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const isEditing = !!initialData;
 
@@ -44,8 +46,10 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSubmitError('');
     
     try {
       const formattedProvider = {
@@ -68,14 +72,17 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
       };
 
       if (onSubmit) {
-        onSubmit(formattedProvider);
+        await onSubmit(formattedProvider);
       }
       
       setSubmitted(true);
       window.scrollTo(0, 0);
     } catch (err) {
       console.error('Erro ao processar prestador:', err);
-      alert('Ocorreu um erro ao realizar o processo. Por favor, tente novamente.');
+      setSubmitError(err.message || 'Ocorreu um erro ao realizar o processo. Por favor, tente novamente.');
+      window.scrollTo(0, 0);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -141,8 +148,6 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
           maxWidth: '800px', 
           margin: '0 auto', 
           background: 'var(--card-bg)', 
-          padding: '48px', 
-          borderRadius: '40px',
           border: '1px solid var(--border)',
           boxShadow: 'var(--shadow-lg)'
         }}
@@ -156,11 +161,17 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
           </p>
         </div>
 
+        {submitError && (
+          <div style={{ background: '#fee2e2', color: '#991b1b', padding: '16px 20px', borderRadius: '12px', marginBottom: '32px', fontWeight: '600', border: '1px solid #fca5a5' }}>
+            ⚠️ {submitError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '40px' }}>
           
           <section className="form-section">
             <h3 style={sectionTitleStyle}><User size={20} /> Dados Principais</h3>
-            <div style={grid2Style}>
+            <div className="grid-2-cols">
               <div className="input-group">
                 <label style={labelStyle}>Nome Completo</label>
                 <input type="text" name="name" required placeholder="Seu nome" value={formData.name} onChange={handleChange} style={inputStyle} />
@@ -170,7 +181,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
                 <input type="tel" name="whatsapp" required placeholder="18999999999" value={formData.whatsapp} onChange={handleChange} style={inputStyle} />
               </div>
             </div>
-            <div style={grid2Style}>
+            <div className="grid-2-cols">
               <div className="input-group">
                 <label style={labelStyle}>Serviço / Profissão</label>
                 <input type="text" name="category" required placeholder="Ex: Pedreiro" value={formData.category} onChange={handleChange} style={inputStyle} />
@@ -180,7 +191,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
                 <input type="text" name="shortDescription" required placeholder="Ex: Especialista em reformas finas" value={formData.shortDescription} onChange={handleChange} style={inputStyle} />
               </div>
             </div>
-            <div style={grid2Style}>
+            <div className="grid-2-cols">
               <div className="input-group">
                 <label style={labelStyle}>Cidade</label>
                 <select name="city" value={formData.city} onChange={handleChange} style={inputStyle}>
@@ -202,7 +213,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
 
           <section className="form-section">
             <h3 style={sectionTitleStyle}><Briefcase size={20} /> Experiência Profissional</h3>
-            <div style={grid2Style}>
+            <div className="grid-2-cols">
               <div className="input-group">
                 <label style={labelStyle}>Tempo de Profissão</label>
                 <select name="experienceTime" value={formData.experienceTime} onChange={handleChange} style={inputStyle}>
@@ -267,7 +278,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
                     <h3 style={{ margin: 0, color: 'var(--accent)', fontWeight: '800' }}>Dados Técnicos ETEC</h3>
                   </div>
                   
-                  <div style={grid2Style}>
+                  <div className="grid-2-cols">
                     <div className="input-group">
                       <label style={labelStyle}><BookOpen size={16} /> Unidade ETEC</label>
                       <input 
@@ -292,7 +303,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
                     </div>
                   </div>
                   
-                  <div style={{ ...grid2Style, marginTop: '20px' }}>
+                  <div className="grid-2-cols" style={{ marginTop: '20px' }}>
                     <div className="input-group">
                       <label style={labelStyle}>Tipo de Vínculo</label>
                       <select name="etec_relation" value={formData.etec_relation} onChange={handleChange} style={inputStyle}>
@@ -326,12 +337,12 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
 
           <section className="form-section">
             <h3 style={sectionTitleStyle}><ShieldCheck size={20} /> Confiança e Atendimento</h3>
-            <div style={grid2Style}>
+            <div className="grid-2-cols">
               <div className="input-group">
                 <label style={labelStyle}>Horário de Atendimento</label>
                 <input type="text" name="availability" placeholder="Ex: Seg a Sex, 8h às 18h" value={formData.availability} onChange={handleChange} style={inputStyle} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', alignSelf: 'end' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', alignSelf: 'end' }}>
                 <label style={checkboxLabelStyle}>
                   <input type="checkbox" name="worksAtHome" checked={formData.worksAtHome} onChange={handleChange} /> Atende em domicílio
                 </label>
@@ -340,7 +351,7 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
                 </label>
               </div>
             </div>
-            <div style={{ ...grid2Style, marginTop: '16px' }}>
+            <div className="grid-2-cols" style={{ marginTop: '16px' }}>
               <label style={checkboxLabelStyle}>
                 <input type="checkbox" name="hasCertificate" checked={formData.hasCertificate} onChange={handleChange} /> Possuo certificado de curso/especialização
               </label>
@@ -350,8 +361,8 @@ const ProviderForm = ({ initialService = '', initialData = null, onBack, onSubmi
             </div>
           </section>
 
-          <button type="submit" className="btn-primary" style={{ padding: '20px', fontSize: '1.2rem', marginTop: '20px' }}>
-            Finalizar e Enviar para Verificação
+          <button type="submit" className="btn-primary" disabled={isLoading} style={{ padding: '20px', fontSize: '1.2rem', marginTop: '20px', opacity: isLoading ? 0.7 : 1 }}>
+            {isLoading ? 'Salvando dados...' : 'Finalizar e Enviar para Verificação'}
           </button>
         </form>
       </motion.div>
@@ -388,13 +399,6 @@ const inputStyle = {
   fontFamily: 'inherit',
   outline: 'none',
   transition: 'all 0.2s ease'
-};
-
-const grid2Style = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '24px',
-  marginBottom: '20px'
 };
 
 const checkboxLabelStyle = {
